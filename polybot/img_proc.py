@@ -1,7 +1,6 @@
 from pathlib import Path
 from matplotlib.image import imread, imsave
 
-
 def rgb2gray(rgb):
     r, g, b = rgb[:, :, 0], rgb[:, :, 1], rgb[:, :, 2]
     gray = 0.2989 * r + 0.5870 * g + 0.1140 * b
@@ -52,7 +51,20 @@ class Img:
 
     def rotate(self):
         # TODO remove the `raise` below, and write your implementation
-        raise NotImplementedError()
+        height = len(self.data)
+        width = len(self.data[0])
+
+        # Create a new empty list for rotated data
+        rotated_data = [[0 for _ in range(height)] for _ in range(width)]
+
+        for x in range(width):
+            for y in range(height):
+                rotated_data[x][y] = self.data[height - y - 1][x]
+
+        # Update the data with the rotated data
+        self.data = rotated_data
+
+        #raise NotImplementedError()
 
     def salt_n_pepper(self):
         # TODO remove the `raise` below, and write your implementation
@@ -65,3 +77,5 @@ class Img:
     def segment(self):
         # TODO remove the `raise` below, and write your implementation
         raise NotImplementedError()
+
+
