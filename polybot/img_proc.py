@@ -54,7 +54,7 @@ class Img:
         width = len(self.data[0])
 
         # Create a new empty list for rotated data
-        rotated_data = [[0 for _ in range(height)] for _ in range(width)]
+        rotated_data = [[0 for i in range(height)] for i in range(width)]
 
         for x in range(width):
             for y in range(height):
