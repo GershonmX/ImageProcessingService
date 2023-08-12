@@ -50,7 +50,6 @@ class Img:
             self.data[i] = res
 
     def rotate(self):
-        # TODO remove the `raise` below, and write your implementation
         height = len(self.data)
         width = len(self.data[0])
 
@@ -64,8 +63,6 @@ class Img:
         # Update the data with the rotated data
         self.data = rotated_data
 
-        #raise NotImplementedError()
-
     def salt_n_pepper(self):
         # TODO remove the `raise` below, and write your implementation
         raise NotImplementedError()
@@ -78,4 +75,11 @@ class Img:
         # TODO remove the `raise` below, and write your implementation
         raise NotImplementedError()
 
+if __name__ == "__main__":
+    input_image_path = '/home/gershonx/ImageProcessingService/ImageProcessingService/polybot/test/beatles.jpeg'
+    my_img = Img(input_image_path)
+    # Rotate the image
+    my_img.rotate()
+    # my_img.rotate()
+    my_img.save_img()
 
