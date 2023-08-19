@@ -63,17 +63,42 @@ class Img:
         # Update the data with the rotated data
         self.data = rotated_data
 
-    def salt_n_pepper(self):
-        # TODO remove the `raise` below, and write your implementation
-        raise NotImplementedError()
+    def salt_n_pepper(self,amount=0.05):
+        import random
+
+        height = len(self.data)
+        width = len(self.data[0])
+
+        for x in range(width):
+            for y in range(height):
+                if random.random() < amount:
+                    self.data[y][x] = 0
+                elif random.random() < amount:
+                    self.data[y][x] = 255):
 
     def concat(self, other_img, direction='horizontal'):
-        # TODO remove the `raise` below, and write your implementation
-        raise NotImplementedError()
+        other_data = other_img.data
+        height = min(len(self.data), len(other_data))
+        width = min(len(self.data[0]), len(other_data[0]))
 
-    def segment(self):
-        # TODO remove the `raise` below, and write your implementation
-        raise NotImplementedError()
+        if direction == 'horizontal':
+            concatenated_data = [self.data[i][:width] + other_data[i][:width] for i in range(height)]
+        else:  # direction == 'vertical'
+            concatenated_data = self.data[:height] + other_data[:height]
+
+        self.data = concatenated_data
+
+    def segment(self, num_segments=4):
+        height = len(self.data)
+        width = len(self.data[0])
+        segment_height = height // num_segments
+
+        segments = []
+        for i in range(num_segments):
+            segment = self.data[i * segment_height:(i + 1) * segment_height]
+            segments.append(segment)
+
+        self.data = segments
 
 if __name__ == "__main__":
     input_image_path = '/home/gershonx/ImageProcessingService/ImageProcessingService/polybot/test/beatles.jpeg'
@@ -81,5 +106,12 @@ if __name__ == "__main__":
     # Rotate the image
     my_img.rotate()
     # my_img.rotate()
+    # Apply Salt and Pepper noise
+    my_img.salt_n_pepper()
+    # Concatenate with itself
+    my_img.concat(my_img, direction='horizontal')
+    # Apply image segmentation
+    my_img.segment(num_segments=4)
+    #save_img
     my_img.save_img()
 
