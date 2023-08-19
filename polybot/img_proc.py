@@ -89,7 +89,7 @@ class Img:
 
     def segment(self, num_segments=4):
         height = len(self.data)
-        width = len(self.data[0])
+        len(self.data[0])
         segment_height = height // num_segments
 
         segments = []
