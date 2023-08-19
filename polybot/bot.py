@@ -3,7 +3,7 @@ from loguru import logger
 import os
 import time
 from telebot.types import InputFile
-from img_proc import Img
+from polybot.img_proc import Img
 
 
 class Bot:
@@ -87,13 +87,24 @@ class ImageProcessingBot(Bot):
         if "photo" in msg:
             # If the message contains a photo, check if it also has a caption
             if "caption" in msg:
-                caption = msg["caption"]
-                if "concat" in caption.lower():
-                    self.process_image(msg)
-                if "contour" in caption.lower():
-                    self.process_image_contur(msg)
-                if "rotate" in caption.lower():
+                caption = msg["caption"].lower()
+                # Check for different processing methods in the caption
+                if 'blur' in caption:
+                    self.process_image_blur(msg)
+                elif 'contour' in caption:
+                    self.process_image_contour(msg)
+                elif 'rotate' in caption:
                     self.process_image_rotate(msg)
+                elif 'segment' in caption:
+                    self.process_image_segment(msg)
+                elif 'salt and pepper' in caption:
+                    self.process_image_salt_and_pepper(msg)
+                elif 'concat' in caption:
+                    self.process_image_concat(msg)
+                else:
+                    self.send_text(msg['chat']['id'],
+                                   "Unknown processing method. Please provide a valid method in the caption.")
+
             else:
                 logger.info("Received photo without a caption.")
         elif "text" in msg:
@@ -161,3 +172,4 @@ class ImageProcessingBot(Bot):
             self.send_photo(msg['chat']['id'], processed_image_path)
 
         self.processing_completed = True
+
