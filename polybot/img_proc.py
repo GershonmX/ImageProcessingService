@@ -1,5 +1,6 @@
 from pathlib import Path
 from matplotlib.image import imread, imsave
+import random
 
 def rgb2gray(rgb):
     r, g, b = rgb[:, :, 0], rgb[:, :, 1], rgb[:, :, 2]
@@ -64,8 +65,6 @@ class Img:
         self.data = rotated_data
 
     def salt_n_pepper(self,amount=0.05):
-        import random
-
         height = len(self.data)
         width = len(self.data[0])
 
@@ -74,7 +73,7 @@ class Img:
                 if random.random() < amount:
                     self.data[y][x] = 0
                 elif random.random() < amount:
-                    self.data[y][x] = 255):
+                    self.data[y][x] = 255
 
     def concat(self, other_img, direction='horizontal'):
         other_data = other_img.data
@@ -95,23 +94,10 @@ class Img:
 
         segments = []
         for i in range(num_segments):
-            segment = self.data[i * segment_height:(i + 1) * segment_height]
+            start_row = i * segment_height
+            end_row = start_row + segment_height if i != num_segments - 1 else height
+            segment = self.data[start_row:end_row]
             segments.append(segment)
 
         self.data = segments
-
-if __name__ == "__main__":
-    input_image_path = '/home/gershonx/ImageProcessingService/ImageProcessingService/polybot/test/beatles.jpeg'
-    my_img = Img(input_image_path)
-    # Rotate the image
-    my_img.rotate()
-    # my_img.rotate()
-    # Apply Salt and Pepper noise
-    my_img.salt_n_pepper()
-    # Concatenate with itself
-    my_img.concat(my_img, direction='horizontal')
-    # Apply image segmentation
-    my_img.segment(num_segments=4)
-    #save_img
-    my_img.save_img()
 
