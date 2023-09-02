@@ -4,6 +4,8 @@ import os
 import time
 from telebot.types import InputFile
 from polybot.img_proc import Img
+import boto3
+import requests
 
 
 class Bot:
@@ -271,6 +273,31 @@ class ObjectDetectionBot(Bot):
 
         if self.is_current_msg_photo(msg):
             photo_path = self.download_user_photo(msg)
+
+            # Task 1: Upload the Photo to S3
+            # Replace 'your-access-key', 'your-secret-key', 'your-bucket-name', and 'your-object-key' with your S3 credentials and desired locations.
+            s3 = boto3.client('s3', aws_access_key_id='your-access-key', aws_secret_access_key='your-secret-key')
+            s3.upload_file(photo_path, 'your-bucket-name', 'your-object-key')
+
+            # Task 2: Send a Request to the `yolo5` Service for Prediction
+            # Replace 'yolo5-service-url' with the actual URL or endpoint of the `yolo5` service.
+            yolo5_service_url = 'yolo5-service-url'
+            with open(photo_path, 'rb') as photo_file:
+                files = {'photo': (photo_path, photo_file)}
+                response = requests.post(yolo5_service_url, files=files)
+
+            # Task 3: Send Results to the Telegram End-User
+            if response.status_code == 200:
+                detected_objects = response.json()  # Assuming the response contains detected object data.
+                # Process and format the detected_objects as needed.
+
+                # Send the formatted results back to the Telegram end-user.
+                self.send_text(msg['chat']['id'], f'Detected Objects: {detected_objects}')
+            else:
+                self.send_text(msg['chat']['id'], 'Object detection service error.')
+
+        # Example usage:
+        # object_detection_bot = ObjectDetectionBot(token='your-bot-token', telegram_chat_url='your-telegram-chat-url')
 
             # TODO upload the photo to S3
             # TODO send a request to the `yolo5` service for prediction
