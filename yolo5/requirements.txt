@@ -1,0 +1,11 @@
+flask
+pyyaml
+loguru
+
+# testing
+
+pylint
+pytest
+boto3
+pymongo
+subprocess
