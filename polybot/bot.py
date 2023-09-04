@@ -4,8 +4,8 @@ import os
 import time
 from telebot.types import InputFile
 from polybot.img_proc import Img
-import boto3
-import requests
+# import boto3
+# import requests
 
 
 class Bot:
